@@ -59,7 +59,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := handler(r.Context(), &req)
+	ctx := context.WithValue(r.Context(), httpRequestKey, r)
+	res, err := handler(ctx, &req)
 	if err != nil {
 		http.Error(w, "error processing intent:"+err.Error(), http.StatusInternalServerError)
 		return
@@ -121,4 +122,17 @@ func (req *Request) Param(name string) string { return req.Result.Parameters[nam
 type Response struct {
 	Speech      string `json:"speech"`
 	DisplayText string `json:"displayText"`
+}
+
+type key string
+
+const httpRequestKey key = "httprequest"
+
+// HTTPRequest returns the HTTP request associated to the given context or nil.
+func HTTPRequest(ctx context.Context) *http.Request {
+	req, ok := ctx.Value(httpRequestKey).(*http.Request)
+	if !ok {
+		return nil
+	}
+	return req
 }
