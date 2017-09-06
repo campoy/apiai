@@ -1,3 +1,6 @@
+[![GoDoc](https://godoc.org/github.com/campoy/apiai?status.svg)](http://godoc.org/github.com/campoy/apiai)
+[![Build Status](https://travis-ci.org/campoy/apiai.svg)](https://travis-ci.org/campoy/apiai) [![Go Report Card](https://goreportcard.com/badge/github.com/campoy/apiai)](https://goreportcard.com/report/github.com/campoy/apiai)
+
 # apiai
 
 This package provides an easy way to handle webhook requests for
