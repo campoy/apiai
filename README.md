@@ -20,6 +20,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -29,7 +30,7 @@ import (
 func main() {
 	h := apiai.NewHandler()
 	h.Register("double", doubleHandler)
-	http.ListenAndServe("0.0.0.0:8080", h)
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", h))
 }
 
 func doubleHandler(ctx context.Context, req *apiai.Request) (*apiai.Response, error) {
