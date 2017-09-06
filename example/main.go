@@ -32,7 +32,7 @@ func main() {
 }
 
 func doubleHandler(ctx context.Context, req *apiai.Request) (*apiai.Response, error) {
-	num, err := strconv.Atoi(req.Param("num"))
+	num, err := strconv.Atoi(req.Param("number"))
 	if err != nil {
 		return nil, fmt.Errorf("could not parse number %q: %v", req.Param("number"), err)
 	}
