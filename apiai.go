@@ -77,6 +77,13 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // IntentHandler handles an intent.
 type IntentHandler func(ctx context.Context, req *Request) (*Response, error)
 
+// A Context adds additional information to a passed message
+type Context struct {
+	Name       string            `json:"name"`
+	Lifespan   int               `json:"lifespan"`
+	Parameters map[string]string `json:"parameters"`
+}
+
 // A Request contains all of the information to an intent invocation.
 type Request struct {
 	Lang   string `json:"lang"`
@@ -88,14 +95,25 @@ type Request struct {
 	SessionID string    `json:"sessionId"`
 	Result    struct {
 		Parameters    map[string]string `json:"parameters"`
-		Contexts      []struct{}        `json:"contexts"` // TODO
+		Contexts      []Context         `json:"contexts"`
 		ResolvedQuery string            `json:"resolvedQuery"`
 		Source        string            `json:"source"`
 		Score         float64           `json:"score"`
 		Speech        string            `json:"speech"`
 		Fulfillment   struct {
 			Messages []struct {
-				// TODO
+				Type     int    `json:"type"`
+				Platform string `json:"platform"`
+				Speech   string `json:"speech"`
+				ImageURL string `json:"imageUrl"`
+				Title    string `json:"title"`
+				Subtitle string `json:"subtitle"`
+				Buttons  []struct {
+					Text     string `json:"text"`
+					Postback string `json:"postback"`
+				} `json:"buttons,omitempty"`
+				Replies []string                          `json:"replies"`
+				Payload map[string]map[string]interface{} `json:"payload"`
 			} `json:"messages"`
 			Speech string `json:"speech"`
 		} `json:"fulfillment"`
@@ -120,8 +138,10 @@ func (req *Request) Param(name string) string { return req.Result.Parameters[nam
 
 // A Response is what an intent responds after an invokation.
 type Response struct {
-	Speech      string `json:"speech"`
-	DisplayText string `json:"displayText"`
+	Speech      string    `json:"speech"`
+	DisplayText string    `json:"displayText"`
+	Source      string    `json:"source"`
+	ContextOut  []Context `json:"contextOut"`
 }
 
 type key string
